@@ -29,12 +29,21 @@ public class securityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/level3/**").hasRole("vip3");
 
         //没有权限默认会到登录页面
-        //需要开启登录的页面
-        http.formLogin();
+        //需要开启登录的页面  默认参数名为 username 和password
+        //http.formLogin().loginPage("/toLogin");
+
+        //自定义参数
+        http.formLogin().loginPage("/toLogin").passwordParameter("pwd").usernameParameter("user").loginProcessingUrl("/login");
 
         //防止网站攻击
         //关闭csrf springboot默认开启  跨站点请求伪造
         http.csrf().disable();
+
+        //开启记住我功能  --保存cookie
+        //默认保存两周
+        http.rememberMe().rememberMeParameter("remember");
+
+        //自定义接收前端的参数
 
         //开启注销功能
         http.logout().deleteCookies("remove").invalidateHttpSession(false).logoutSuccessUrl("/");
